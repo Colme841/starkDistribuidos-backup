@@ -8,12 +8,19 @@ spring:
     hibernate:
       ddl-auto: update
 
+  # --- SEGURIDAD CONFIGURADA CORRECTAMENTE ---
+  security:
+    user:
+      name: admin
+      password: admin123
+
 eureka:
   client:
     service-url:
-      defaultZone: http://admin:admin123@localhost:8761/eureka/
+      defaultZone: http://admin:admin123@127.0.0.1:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
+    
 
 server:
   port: 8081
@@ -21,4 +28,4 @@ server:
 jwt:
   secret: StarkIndustriesSecuritySystemJWTSecretKeyForMicroservices2024
   expiration: 86400000
-
+  

@@ -29,17 +29,20 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
+                // Página de login y registro sin autenticación
+                .requestMatchers("/", "/index.html", "/stark-security/", "/stark-security/index.html").permitAll()
                 // Recursos estáticos sin autenticación
-                .requestMatchers("/stark-security/", "/stark-security/index.html").permitAll()
-                .requestMatchers("/stark-security/static/**").permitAll()
-                .requestMatchers("/stark-security/js/**").permitAll()
-                .requestMatchers("/stark-security/styles/**").permitAll()
-                .requestMatchers("/stark-security/images/**").permitAll()
-                .requestMatchers("/stark-security/css/**").permitAll()
+                .requestMatchers("/stark-security/static/**", "/static/**").permitAll()
+                .requestMatchers("/stark-security/js/**", "/js/**").permitAll()
+                .requestMatchers("/stark-security/styles/**", "/styles/**").permitAll()
+                .requestMatchers("/stark-security/images/**", "/images/**").permitAll()
+                .requestMatchers("/stark-security/css/**", "/css/**").permitAll()
                 // WebSocket sin autenticación (será proxeado por gateway)
-                .requestMatchers("/stark-security/ws/**").permitAll()
+                .requestMatchers("/stark-security/ws/**", "/ws/**").permitAll()
+                // API endpoints de autenticación
+                .requestMatchers("/stark-security/api/auth/**", "/api/auth/**").permitAll()
                 // Health check sin autenticación
-                .requestMatchers("/actuator/health").permitAll()
+                .requestMatchers("/actuator/health", "/health").permitAll()
                 // Todo lo demás requiere autenticación
                 .anyRequest().authenticated()
             )

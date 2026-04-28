@@ -2,9 +2,6 @@
 // AUTENTICACIÓN - LOGIN Y REGISTRO
 // ============================
 
-/**
- * Maneja el login del usuario
- */
 document.addEventListener('DOMContentLoaded', function () {
     const loginFormElement = document.getElementById('loginFormElement');
     if (loginFormElement) {
@@ -15,11 +12,47 @@ document.addEventListener('DOMContentLoaded', function () {
     if (registerFormElement) {
         registerFormElement.addEventListener('submit', handleRegister);
     }
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', logout);
+    }
 });
 
-/**
- * Realiza el login
- */
+function goToDashboard(username) {
+    const authContainer = document.getElementById('authContainer');
+    const dashboardContainer = document.getElementById('dashboardContainer');
+    const userDisplay = document.getElementById('userDisplay');
+
+    if (authContainer) {
+        authContainer.style.display = 'none';
+    }
+
+    if (dashboardContainer) {
+        dashboardContainer.style.display = 'block';
+    }
+
+    if (userDisplay) {
+        userDisplay.textContent = username;
+    }
+
+    if (typeof switchTab === 'function') {
+        switchTab('overview');
+    }
+
+    if (typeof loadSensors === 'function') {
+        loadSensors();
+    }
+
+    if (typeof loadAlerts === 'function') {
+        loadAlerts();
+    }
+
+    if (typeof loadAccessLogs === 'function') {
+        loadAccessLogs();
+    }
+}
+
 async function handleLogin(event) {
     event.preventDefault();
 
@@ -29,44 +62,41 @@ async function handleLogin(event) {
     const submitBtn = event.target.querySelector('button[type="submit"]');
     const loader = submitBtn.querySelector('.loader');
 
-    // Mostrar loader
     submitBtn.querySelector('span:first-child').style.display = 'none';
     loader.style.display = 'block';
     errorDiv.textContent = '';
 
     try {
-        // Verificar credenciales llamando a un endpoint de verificación
-        const response = await fetch('/stark-security/api/system/health', {
-            method: 'GET',
+        const response = await fetch('http://localhost:8081/api/auth/login', {
+            method: 'POST',
             headers: {
-                'Authorization': 'Basic ' + encodeBasicAuth(username, password),
+                'Content-Type': 'application/json'
             },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
         });
 
-        // Ocultar loader
         submitBtn.querySelector('span:first-child').style.display = 'inline';
         loader.style.display = 'none';
 
-        if (response.ok) {
-            // Login exitoso
-            const token = encodeBasicAuth(username, password);
-            authToken = token;
-            currentUser = {
-                username: username,
-                roles: ['USER'], // Esto se podría obtener de un endpoint
-            };
-
-            // Guardar en localStorage
-            localStorage.setItem('authToken', token);
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
-            // Mostrar dashboard
-            showDashboard();
-        } else {
+        if (!response.ok) {
             errorDiv.textContent = '❌ Usuario o contraseña inválidos';
+            return;
         }
+
+        const data = await response.json();
+
+        localStorage.setItem('authToken', data.token || 'token_' + Date.now());
+        localStorage.setItem('currentUser', JSON.stringify({
+            username: username,
+            roles: ['USER']
+        }));
+
+        goToDashboard(username);
+
     } catch (error) {
-        // Ocultar loader
         submitBtn.querySelector('span:first-child').style.display = 'inline';
         loader.style.display = 'none';
         errorDiv.textContent = '⚠️ Error de conexión: ' + error.message;
@@ -74,9 +104,6 @@ async function handleLogin(event) {
     }
 }
 
-/**
- * Realiza el registro de un nuevo usuario
- */
 async function handleRegister(event) {
     event.preventDefault();
 
@@ -88,9 +115,9 @@ async function handleRegister(event) {
     const submitBtn = event.target.querySelector('button[type="submit"]');
     const loader = submitBtn.querySelector('.loader');
 
+    errorDiv.style.color = '';
     errorDiv.textContent = '';
 
-    // Validaciones
     if (password !== passwordConfirm) {
         errorDiv.textContent = '❌ Las contraseñas no coinciden';
         return;
@@ -101,45 +128,48 @@ async function handleRegister(event) {
         return;
     }
 
-    // Mostrar loader
+    if (!isValidEmail(email)) {
+        errorDiv.textContent = '❌ Email no válido';
+        return;
+    }
+
     submitBtn.querySelector('span:first-child').style.display = 'none';
     loader.style.display = 'block';
 
     try {
-        // Aquí iría la llamada al endpoint de registro
-        // Por ahora, simularemos un registro exitoso
-        // En producción, esto debería llamar a un servicio de autenticación real
+        const response = await fetch('http://localhost:8081/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password
+            })
+        });
 
-        // Simulamos que el registro es exitoso después de 1 segundo
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        submitBtn.querySelector('span:first-child').style.display = 'inline';
+        loader.style.display = 'none';
 
-        // Después del registro, hacer login automático
-        document.getElementById('regUsername').value = username;
-        document.getElementById('regPassword').value = password;
+        if (!response.ok) {
+            errorDiv.textContent = '❌ Error al registrar. Código: ' + response.status;
+            return;
+        }
 
-        // Mostrar mensaje de éxito
+        localStorage.setItem('currentUser', JSON.stringify({
+            username: username,
+            roles: ['USER']
+        }));
+
         errorDiv.style.color = 'var(--success-color)';
-        errorDiv.textContent = '✅ Registro exitoso. Iniciando sesión...';
+        errorDiv.textContent = '✅ Registro exitoso. Entrando al dashboard...';
 
-        // Esperar y luego hacer login
         setTimeout(() => {
-            // Cambiar a login y hacer login automático
-            const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
+            goToDashboard(username);
+        }, 700);
 
-            loginForm.classList.add('active');
-            registerForm.classList.remove('active');
-
-            // Llenar datos de login
-            document.getElementById('loginUsername').value = username;
-            document.getElementById('loginPassword').value = password;
-
-            // Hacer login
-            const loginEvent = new Event('submit');
-            document.getElementById('loginFormElement').dispatchEvent(loginEvent);
-        }, 1500);
     } catch (error) {
-        // Ocultar loader
         submitBtn.querySelector('span:first-child').style.display = 'inline';
         loader.style.display = 'none';
         errorDiv.textContent = '⚠️ Error en el registro: ' + error.message;
@@ -147,11 +177,23 @@ async function handleRegister(event) {
     }
 }
 
-/**
- * Validación de email
- */
+function logout() {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('currentUser');
+
+    const dashboardContainer = document.getElementById('dashboardContainer');
+    const authContainer = document.getElementById('authContainer');
+
+    if (dashboardContainer) {
+        dashboardContainer.style.display = 'none';
+    }
+
+    if (authContainer) {
+        authContainer.style.display = 'block';
+    }
+}
+
 function isValidEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
-

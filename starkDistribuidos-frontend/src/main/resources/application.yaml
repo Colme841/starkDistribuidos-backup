@@ -56,7 +56,9 @@ logging:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://admin:admin123@localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
   instance:
     preferIpAddress: true
     lease-renewal-interval-in-seconds: 10

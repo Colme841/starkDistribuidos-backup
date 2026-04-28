@@ -112,7 +112,7 @@ services:
     volumes:
       - ./starkDistribuidos-notification/target/stark-notification-0.0.1-SNAPSHOT.jar:/app/notification.jar
     ports:
-      - "8085:8085"
+      - "8086:8086"
     environment:
       - JAVA_OPTS=-Xmx512m -Xms256m
     command: java -jar notification.jar
