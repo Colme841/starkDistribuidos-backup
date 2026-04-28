@@ -26,6 +26,9 @@
         <module>starkDistribuidos-notification</module>
         <module>starkDistribuidos-config</module>
         <module>starkDistribuidos-frontend</module>
+        <module>starkDistribuidos-sensor-movimiento</module>
+        <module>starkDistribuidos-sensor-temperatura</module>
+        <module>starkDistribuidos-sensor-acceso</module>
     </modules>
 
     <dependencyManagement>
