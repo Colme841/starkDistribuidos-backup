@@ -67,7 +67,7 @@ async function handleLogin(event) {
     errorDiv.textContent = '';
 
     try {
-        const response = await fetch('http://localhost:8081/api/auth/login', {
+        const response = await fetch('http://localhost:8080/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -137,7 +137,7 @@ async function handleRegister(event) {
     loader.style.display = 'block';
 
     try {
-        const response = await fetch('http://localhost:8081/api/auth/register', {
+        const response = await fetch('http://localhost:8080/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

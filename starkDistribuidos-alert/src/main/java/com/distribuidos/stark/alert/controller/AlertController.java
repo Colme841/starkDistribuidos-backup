@@ -6,7 +6,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/alerts")
-@CrossOrigin(origins = "*")
 public class AlertController {
     @GetMapping
     public ResponseEntity<List<?>> getAllAlerts() {

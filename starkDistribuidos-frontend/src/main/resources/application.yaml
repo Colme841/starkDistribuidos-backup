@@ -35,9 +35,9 @@ spring:
 
 # Configuración del servidor
 server:
-  port: 8085
+  port: 8086
   servlet:
-    context-path: /stark-security
+    context-path: /
   compression:
     enabled: true
     min-response-size: 1024

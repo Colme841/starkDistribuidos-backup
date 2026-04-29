@@ -6,7 +6,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/sensors")
-@CrossOrigin(origins = "*")
 public class SensorController {
     @GetMapping
     public ResponseEntity<List<?>> getAllSensors() {

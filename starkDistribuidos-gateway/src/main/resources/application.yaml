@@ -21,7 +21,7 @@ spring:
           predicates:
             - Path=/api/notifications/**
         - id: auth-service
-          uri: lb://localhost:8081
+          uri: lb://stark-auth
           predicates:
             - Path=/api/auth/**
 
