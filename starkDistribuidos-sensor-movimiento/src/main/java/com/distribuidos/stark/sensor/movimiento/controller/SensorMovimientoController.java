@@ -2,6 +2,7 @@ package com.distribuidos.stark.sensor.movimiento.controller;
 
 import com.distribuidos.stark.sensor.movimiento.entity.SensorMovimiento;
 import com.distribuidos.stark.sensor.movimiento.service.SensorMovimientoService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,7 +40,7 @@ public class SensorMovimientoController {
     }
 
     @PostMapping
-    public ResponseEntity<SensorMovimiento> crear(@RequestBody SensorMovimiento lectura) {
+    public ResponseEntity<SensorMovimiento> crear(@Valid @RequestBody SensorMovimiento lectura) {
         return ResponseEntity.ok(service.guardar(lectura));
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class SensorAccesoService {
@@ -24,7 +24,6 @@ public class SensorAccesoService {
     };
 
     private final SensorAccesoRepository repository;
-    private final Random random = new Random();
 
     public SensorAccesoService(SensorAccesoRepository repository) {
         this.repository = repository;
@@ -33,19 +32,19 @@ public class SensorAccesoService {
     @Scheduled(fixedRate = 5000)
     @Transactional
     public void generarLecturaAleatoria() {
-        String tarjeta = TARJETAS[random.nextInt(TARJETAS.length)];
+        String tarjeta = TARJETAS[ThreadLocalRandom.current().nextInt(TARJETAS.length)];
         SensorAcceso evento = new SensorAcceso();
-        evento.setPuerta(PUERTAS[random.nextInt(PUERTAS.length)]);
+        evento.setPuerta(PUERTAS[ThreadLocalRandom.current().nextInt(PUERTAS.length)]);
         evento.setTarjetaId(tarjeta);
         // Las tarjetas UNKNOWN son siempre denegadas; el resto tienen 85 % de aprobación
-        evento.setAutorizado(!tarjeta.startsWith("UNKNOWN") && random.nextInt(100) < 85);
+        evento.setAutorizado(!tarjeta.startsWith("UNKNOWN") && ThreadLocalRandom.current().nextInt(100) < 85);
         evento.setTimestamp(LocalDateTime.now());
         repository.save(evento);
     }
 
     @Transactional(readOnly = true)
     public List<SensorAcceso> obtenerTodos() {
-        return repository.findAll();
+        return repository.findTop50ByOrderByTimestampDesc();
     }
 
     @Transactional(readOnly = true)

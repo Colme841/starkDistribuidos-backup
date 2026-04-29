@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public interface SensorTemperaturaRepository extends JpaRepository<SensorTemperatura, Long> {
 
+    List<SensorTemperatura> findTop50ByOrderByTimestampDesc();
+
     List<SensorTemperatura> findTop10ByOrderByTimestampDesc();
 
     List<SensorTemperatura> findByUbicacion(String ubicacion);

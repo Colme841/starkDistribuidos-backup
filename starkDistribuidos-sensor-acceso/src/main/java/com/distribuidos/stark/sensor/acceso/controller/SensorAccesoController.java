@@ -2,6 +2,7 @@ package com.distribuidos.stark.sensor.acceso.controller;
 
 import com.distribuidos.stark.sensor.acceso.entity.SensorAcceso;
 import com.distribuidos.stark.sensor.acceso.service.SensorAccesoService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +45,7 @@ public class SensorAccesoController {
     }
 
     @PostMapping
-    public ResponseEntity<SensorAcceso> crear(@RequestBody SensorAcceso evento) {
+    public ResponseEntity<SensorAcceso> crear(@Valid @RequestBody SensorAcceso evento) {
         return ResponseEntity.ok(service.guardar(evento));
     }
 }

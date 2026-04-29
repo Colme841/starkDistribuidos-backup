@@ -1,6 +1,7 @@
 package com.distribuidos.stark.sensor.acceso.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,9 +19,11 @@ public class SensorAcceso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Column(nullable = false)
     private String puerta;
 
+    @NotBlank
     @Column(nullable = false)
     private String tarjetaId;
 

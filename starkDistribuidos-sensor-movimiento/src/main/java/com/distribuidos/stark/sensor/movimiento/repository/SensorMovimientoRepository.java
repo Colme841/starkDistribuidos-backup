@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface SensorMovimientoRepository extends JpaRepository<SensorMovimiento, Long> {
 
+    List<SensorMovimiento> findTop50ByOrderByTimestampDesc();
+
     List<SensorMovimiento> findTop10ByOrderByTimestampDesc();
 
     List<SensorMovimiento> findByZona(String zona);

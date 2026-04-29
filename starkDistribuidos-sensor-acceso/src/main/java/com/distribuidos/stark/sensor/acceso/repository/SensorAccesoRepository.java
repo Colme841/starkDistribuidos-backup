@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface SensorAccesoRepository extends JpaRepository<SensorAcceso, Long> {
 
+    List<SensorAcceso> findTop50ByOrderByTimestampDesc();
+
     List<SensorAcceso> findTop10ByOrderByTimestampDesc();
 
     List<SensorAcceso> findByPuerta(String puerta);

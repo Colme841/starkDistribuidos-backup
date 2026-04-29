@@ -2,6 +2,7 @@ package com.distribuidos.stark.sensor.temperatura.controller;
 
 import com.distribuidos.stark.sensor.temperatura.entity.SensorTemperatura;
 import com.distribuidos.stark.sensor.temperatura.service.SensorTemperaturaService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +41,7 @@ public class SensorTemperaturaController {
     }
 
     @PostMapping
-    public ResponseEntity<SensorTemperatura> crear(@RequestBody SensorTemperatura lectura) {
+    public ResponseEntity<SensorTemperatura> crear(@Valid @RequestBody SensorTemperatura lectura) {
         return ResponseEntity.ok(service.guardar(lectura));
     }
 }

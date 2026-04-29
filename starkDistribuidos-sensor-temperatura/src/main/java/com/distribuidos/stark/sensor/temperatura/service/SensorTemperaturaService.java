@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class SensorTemperaturaService {
@@ -19,7 +19,6 @@ public class SensorTemperaturaService {
     };
 
     private final SensorTemperaturaRepository repository;
-    private final Random random = new Random();
 
     public SensorTemperaturaService(SensorTemperaturaRepository repository) {
         this.repository = repository;
@@ -29,19 +28,19 @@ public class SensorTemperaturaService {
     @Transactional
     public void generarLecturaAleatoria() {
         SensorTemperatura lectura = new SensorTemperatura();
-        lectura.setUbicacion(UBICACIONES[random.nextInt(UBICACIONES.length)]);
+        lectura.setUbicacion(UBICACIONES[ThreadLocalRandom.current().nextInt(UBICACIONES.length)]);
         // Temperatura entre -10.0 y 50.0 °C
-        double temp = -10.0 + (random.nextDouble() * 60.0);
+        double temp = -10.0 + (ThreadLocalRandom.current().nextDouble() * 60.0);
         lectura.setTemperatura(Math.round(temp * 10.0) / 10.0);
         // Humedad entre 0.0 y 100.0 %
-        lectura.setHumedad(Math.round(random.nextDouble() * 100.0 * 10.0) / 10.0);
+        lectura.setHumedad(Math.round(ThreadLocalRandom.current().nextDouble() * 100.0 * 10.0) / 10.0);
         lectura.setTimestamp(LocalDateTime.now());
         repository.save(lectura);
     }
 
     @Transactional(readOnly = true)
     public List<SensorTemperatura> obtenerTodas() {
-        return repository.findAll();
+        return repository.findTop50ByOrderByTimestampDesc();
     }
 
     @Transactional(readOnly = true)

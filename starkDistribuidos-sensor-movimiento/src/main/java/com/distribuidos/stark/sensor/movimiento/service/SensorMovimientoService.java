@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class SensorMovimientoService {
@@ -19,7 +19,6 @@ public class SensorMovimientoService {
     };
 
     private final SensorMovimientoRepository repository;
-    private final Random random = new Random();
 
     public SensorMovimientoService(SensorMovimientoRepository repository) {
         this.repository = repository;
@@ -29,16 +28,16 @@ public class SensorMovimientoService {
     @Transactional
     public void generarLecturaAleatoria() {
         SensorMovimiento lectura = new SensorMovimiento();
-        lectura.setZona(ZONAS[random.nextInt(ZONAS.length)]);
-        lectura.setMovimientoDetectado(random.nextBoolean());
-        lectura.setIntensidad(Math.round(random.nextDouble() * 100.0 * 10.0) / 10.0);
+        lectura.setZona(ZONAS[ThreadLocalRandom.current().nextInt(ZONAS.length)]);
+        lectura.setMovimientoDetectado(ThreadLocalRandom.current().nextBoolean());
+        lectura.setIntensidad(Math.round(ThreadLocalRandom.current().nextDouble() * 100.0 * 10.0) / 10.0);
         lectura.setTimestamp(LocalDateTime.now());
         repository.save(lectura);
     }
 
     @Transactional(readOnly = true)
     public List<SensorMovimiento> obtenerTodas() {
-        return repository.findAll();
+        return repository.findTop50ByOrderByTimestampDesc();
     }
 
     @Transactional(readOnly = true)
