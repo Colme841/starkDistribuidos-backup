@@ -24,7 +24,25 @@ $services = @(
     @{
         Name = "SENSOR SERVICE"
         Dir = "starkDistribuidos-sensor"
-        Port = "8081"
+        Port = "8082"
+        Color = "Green"
+    },
+    @{
+        Name = "SENSOR MOVIMIENTO"
+        Dir = "starkDistribuidos-sensor-movimiento"
+        Port = "8091"
+        Color = "Green"
+    },
+    @{
+        Name = "SENSOR TEMPERATURA"
+        Dir = "starkDistribuidos-sensor-temperatura"
+        Port = "8092"
+        Color = "Green"
+    },
+    @{
+        Name = "SENSOR ACCESO"
+        Dir = "starkDistribuidos-sensor-acceso"
+        Port = "8093"
         Color = "Green"
     },
     @{

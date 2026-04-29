@@ -186,6 +186,35 @@
                 <div id="sensorsGrid" class="sensors-grid">
                     <p class="placeholder">Cargando sensores...</p>
                 </div>
+
+                <!-- Lecturas en tiempo real de los microservicios de sensores -->
+                <div class="readings-section-header">
+                    <h3>Lecturas en Tiempo Real</h3>
+                    <button class="btn-secondary" onclick="loadSensorReadings()">🔄 Actualizar</button>
+                </div>
+                <div class="sensor-readings-grid">
+                    <div class="sensor-readings-card">
+                        <div class="sensor-readings-header">
+                            <h4>Movimiento</h4>
+                            <span class="sensor-badge">:8091</span>
+                        </div>
+                        <div id="movimientoReadings"><p class="placeholder">Cargando...</p></div>
+                    </div>
+                    <div class="sensor-readings-card">
+                        <div class="sensor-readings-header">
+                            <h4>Temperatura</h4>
+                            <span class="sensor-badge">:8092</span>
+                        </div>
+                        <div id="temperaturaReadings"><p class="placeholder">Cargando...</p></div>
+                    </div>
+                    <div class="sensor-readings-card">
+                        <div class="sensor-readings-header">
+                            <h4>Acceso</h4>
+                            <span class="sensor-badge">:8093</span>
+                        </div>
+                        <div id="accesoReadings"><p class="placeholder">Cargando...</p></div>
+                    </div>
+                </div>
             </section>
 
             <!-- Alerts Tab -->

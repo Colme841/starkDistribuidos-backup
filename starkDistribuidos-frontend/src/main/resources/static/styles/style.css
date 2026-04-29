@@ -245,8 +245,109 @@ td {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* =========================================
+   LECTURAS EN TIEMPO REAL - SENSOR DATA
+   ========================================= */
+.readings-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem 0.5rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 1rem;
+}
+
+.readings-section-header h3 {
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+}
+
+.sensor-readings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 2rem 2rem;
+}
+
+.sensor-readings-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.sensor-readings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 212, 255, 0.05);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sensor-readings-header h4 {
+    color: var(--secondary-color);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.sensor-badge {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    font-family: 'Consolas', monospace;
+}
+
+.sensor-readings-card .readings-table {
+    width: 100%;
+    font-size: 0.75rem;
+    margin-top: 0;
+}
+
+.sensor-readings-card .readings-table th {
+    font-size: 0.65rem;
+    padding: 8px 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sensor-readings-card .readings-table td {
+    padding: 6px 10px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.75rem;
+}
+
+.sensor-readings-card .placeholder {
+    padding: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.btn-secondary {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: var(--transition);
+}
+
+.btn-secondary:hover {
+    background: rgba(0, 212, 255, 0.1);
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .auth-wrapper { flex-direction: column; align-items: center; }
     .form-container { min-width: 90%; }
+    .sensor-readings-grid { grid-template-columns: 1fr; }
 }

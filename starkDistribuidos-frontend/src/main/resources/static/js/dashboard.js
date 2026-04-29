@@ -356,6 +356,96 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+// ============================
+// LECTURAS EN TIEMPO REAL - MICROSERVICIOS DE SENSORES
+// ============================
+
+const GATEWAY_URL = 'http://localhost:8080';
+
+async function fetchSensor(path) {
+    try {
+        const response = await fetch(GATEWAY_URL + path);
+        if (!response.ok) return [];
+        return await response.json();
+    } catch {
+        return [];
+    }
+}
+
+async function loadSensorReadings() {
+    const [movimiento, temperatura, acceso] = await Promise.all([
+        fetchSensor('/api/sensores/movimiento/ultimas'),
+        fetchSensor('/api/sensores/temperatura/ultimas'),
+        fetchSensor('/api/sensores/acceso/ultimos'),
+    ]);
+    renderMovimientoReadings(movimiento);
+    renderTemperaturaReadings(temperatura);
+    renderAccesoReadings(acceso);
+}
+
+function renderMovimientoReadings(data) {
+    const el = document.getElementById('movimientoReadings');
+    if (!el) return;
+    if (!data.length) {
+        el.innerHTML = '<p class="placeholder">Sin lecturas disponibles</p>';
+        return;
+    }
+    el.innerHTML = `
+        <table class="readings-table">
+            <thead><tr><th>Zona</th><th>Movimiento</th><th>Intensidad</th><th>Hora</th></tr></thead>
+            <tbody>
+                ${data.map(r => `<tr>
+                    <td>${r.zona}</td>
+                    <td>${r.movimientoDetectado ? '● Sí' : '○ No'}</td>
+                    <td>${r.intensidad}%</td>
+                    <td>${formatDate(r.timestamp)}</td>
+                </tr>`).join('')}
+            </tbody>
+        </table>`;
+}
+
+function renderTemperaturaReadings(data) {
+    const el = document.getElementById('temperaturaReadings');
+    if (!el) return;
+    if (!data.length) {
+        el.innerHTML = '<p class="placeholder">Sin lecturas disponibles</p>';
+        return;
+    }
+    el.innerHTML = `
+        <table class="readings-table">
+            <thead><tr><th>Ubicación</th><th>Temp °C</th><th>Humedad %</th><th>Hora</th></tr></thead>
+            <tbody>
+                ${data.map(r => `<tr>
+                    <td>${r.ubicacion}</td>
+                    <td>${r.temperatura}</td>
+                    <td>${r.humedad}</td>
+                    <td>${formatDate(r.timestamp)}</td>
+                </tr>`).join('')}
+            </tbody>
+        </table>`;
+}
+
+function renderAccesoReadings(data) {
+    const el = document.getElementById('accesoReadings');
+    if (!el) return;
+    if (!data.length) {
+        el.innerHTML = '<p class="placeholder">Sin lecturas disponibles</p>';
+        return;
+    }
+    el.innerHTML = `
+        <table class="readings-table">
+            <thead><tr><th>Puerta</th><th>Tarjeta</th><th>Estado</th><th>Hora</th></tr></thead>
+            <tbody>
+                ${data.map(r => `<tr>
+                    <td>${r.puerta}</td>
+                    <td>${r.tarjetaId}</td>
+                    <td>${r.autorizado ? '✓ Autorizado' : '✗ Denegado'}</td>
+                    <td>${formatDate(r.timestamp)}</td>
+                </tr>`).join('')}
+            </tbody>
+        </table>`;
+}
+
 /**
  * Recarga periódica de datos (cada 30 segundos)
  */
@@ -363,6 +453,9 @@ setInterval(() => {
     if (currentUser) {
         loadSensorStats();
         loadAlertStats();
+        if (document.getElementById('sensorsTab')?.classList.contains('active')) {
+            loadSensorReadings();
+        }
     }
 }, 30000);
 

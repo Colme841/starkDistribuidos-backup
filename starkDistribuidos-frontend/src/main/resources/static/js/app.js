@@ -129,6 +129,7 @@ function switchTab(tabName) {
     // Cargar datos según la pestaña
     if (tabName === 'sensors') {
         loadSensors();
+        loadSensorReadings();
     } else if (tabName === 'alerts') {
         loadAlerts();
     } else if (tabName === 'access') {
