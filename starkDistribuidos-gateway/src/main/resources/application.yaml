@@ -24,6 +24,18 @@ spring:
           uri: lb://stark-auth
           predicates:
             - Path=/api/auth/**
+        - id: sensor-movimiento-service
+          uri: lb://stark-sensor-movimiento
+          predicates:
+            - Path=/api/sensores/movimiento/**
+        - id: sensor-temperatura-service
+          uri: lb://stark-sensor-temperatura
+          predicates:
+            - Path=/api/sensores/temperatura/**
+        - id: sensor-acceso-service
+          uri: lb://stark-sensor-acceso
+          predicates:
+            - Path=/api/sensores/acceso/**
 
 eureka:
   client:

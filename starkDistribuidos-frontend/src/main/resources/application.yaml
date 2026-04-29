@@ -98,7 +98,7 @@ spring:
     show-sql: false
 
 server:
-  port: 8085
+  port: 8086
   servlet:
     context-path: /stark-security
   compression:

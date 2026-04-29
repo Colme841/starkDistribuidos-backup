@@ -66,7 +66,7 @@ management:
 
 # Configuración del servidor
 server:
-  port: 8080
+  port: 8089
   servlet:
     context-path: /stark-security
   compression:
